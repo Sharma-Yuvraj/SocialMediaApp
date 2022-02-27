@@ -17,17 +17,17 @@ const isAuth = (req, res, next) => {
 router.get('/', userController.home_guest);
 
 router.get('/home-dashboard', isAuth, userController.home_dashboard);
-router.get('/profile', isAuth, userController.profile);
+router.get('/profile/:username', isAuth, userController.profile);
 router.post('/login', userController.user_login);
 router.post('/register', userController.user_register);
 router.post('/logout', isAuth, userController.user_logout);
 
 
 
-router.post('/create-post', isAuth, postController.create_post);
+router.get('/create-post', isAuth, postController.create_post_get);
+router.post('/create-post', isAuth, postController.create_post_post);
 router.post('/edit-post', isAuth, postController.edit_post);
-router.get('/single-post-screen', isAuth, postController.single_post_screen);
-router.post('/post', isAuth, postController.post);
+router.post('/post', isAuth, postController.single_post_screen);
 
 
 

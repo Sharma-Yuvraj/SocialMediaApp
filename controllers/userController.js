@@ -1,12 +1,10 @@
-const mongoUtil=require('../db');
-var db=mongoUtil.getDb();
 var bcrypt = require('bcryptjs');
 var validator = require('validator');
-
+var user_doc = require('../models/User');
 
 
 module.exports.home_dashboard = (req, res) => {
-    res.render('home-dashboard');
+    res.render('home-dashboard',{user : req.session.user});
 };
 
 module.exports.home_guest = (req, res) => {
@@ -14,50 +12,78 @@ module.exports.home_guest = (req, res) => {
 };
 
 module.exports.profile = (req, res) => {
-    res.render('profile');
+    user_doc.findOne({username: req.params.username})
+        .then(result=>{
+            // console.log(result.post.length);
+
+            res.render('profile',{other: result,myself: req.session.user});
+        })
+        .catch(err=>{
+            res.redirect('back');
+        });
 };
 
-module.exports.user_register = (req, res) => {
-    const data = req.body;
-    if (validator.isEmail(data.email)) {
-        var hash = bcrypt.hashSync(data.password, 8);
-        db.collection('credentials').find({
-            $or: [
-                { username: data.username },
-                { email: data.email }
-            ]
-        })
-            .toArray()
-            .then(result => {
-                if (result.length == 0) {
-                    db.collection('credentials').insertOne({ username: data.username, email: data.email, password: hash })
-                        .then(result => {
-                            res.redirect('/');
-                        })
-                        .catch(err => console.log(err));
-                }
-                else {
-                    res.redirect('/');
-                }
-            })
-            .catch(err => console.log(err));
+module.exports.user_register = async (req, res) => {
+    const { username, email, password } = req.body;
+    const errors = [];
+    if (!validator.isEmail(email)) {
+        errors.push({
+            param: 'email',
+            msg: 'Invalid e-mail address.'
+        });
+    }
+    try {
+        const usernameExists = await user_doc.countDocuments({ username: username });
+        const emailExists = await user_doc.countDocuments({ email: email });
+        if (usernameExists === 1) {
+            errors.push({
+                param: 'username',
+                msg: 'Invalid username.'
+            });
+        }
+        else if (emailExists === 1) {
+            errors.push({
+                param: 'email',
+                msg: 'Invalid e-mail address.'
+            });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+    if (errors.length == 0) {
+        const hash = bcrypt.hashSync(password, 8);
+        const newUser = new user_doc({
+            username,
+            email,
+            password: hash
+        });
+
+        try {
+            newUser.save();
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
     else {
-        res.redirect('/');
+        // flash message to be implemented
+        // res.json({ errors });
     }
+    res.redirect('/');
+
 };
 
 
 module.exports.user_login = (req, res) => {
-    var data = req.body;
-    db.collection('credentials').findOne({ username: data.username })
+    const { username, password } = req.body;
+    user_doc.findOne({ username: username })
         .then(result => {
             if (result == null) {
                 res.redirect('/');
             }
-            if (bcrypt.compareSync(data.password, result.password)) {
-                // req.session.username = data.username;
+            if (bcrypt.compareSync(password, result.password)) {
                 req.session.isAuth = true;
+                req.session.user = result;
                 res.redirect('/home-dashboard');
             }
             else {

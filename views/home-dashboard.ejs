@@ -25,7 +25,7 @@
                     data-placement="bottom"><i class="fas fa-search"></i></a>
                 <span class="text-white mr-2 header-chat-icon" title="Chat" data-toggle="tooltip"
                     data-placement="bottom"><i class="fas fa-comment"></i></span>
-                <a href="/profile" class="mr-2"><img title="My Profile" data-toggle="tooltip"
+                <a href="/profile/<%=user.username%>" class="mr-2"><img title="My Profile" data-toggle="tooltip"
                         data-placement="bottom" style="width: 32px; height: 32px; border-radius: 16px;"
                         src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
                 <a class="btn btn-sm btn-success mr-2" href="/create-post">Create Post</a>
@@ -39,14 +39,8 @@
     </header>
 
     <div class="container py-md-5 container--narrow">
-
-
-
-
-
-
         <div class="text-center">
-            <h2>Hello <strong>dontknow</strong>, your feed is empty.</h2>
+            <h2>Hello <strong><%= user.username %></strong>, your feed is empty.</h2>
             <p class="lead text-muted">Your feed displays the latest posts from the people you follow. If you
                 don&rsquo;t have any friends to follow that&rsquo;s okay; you can use the &ldquo;Search&rdquo; feature
                 in the top menu bar to find content written by people with similar interests and then follow them.</p>
