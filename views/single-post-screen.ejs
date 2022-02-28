@@ -18,7 +18,7 @@
         <div class="flex-row my-3 my-md-0">
                 <a href="#" class="text-white mr-2 header-search-icon" title="Search" data-toggle="tooltip" data-placement="bottom"><i class="fas fa-search"></i></a>
                 <span class="text-white mr-2 header-chat-icon" title="Chat" data-toggle="tooltip" data-placement="bottom"><i class="fas fa-comment"></i></span>
-                <a href="/profile/dontknow" class="mr-2"><img title="My Profile" data-toggle="tooltip" data-placement="bottom" style="width: 32px; height: 32px; border-radius: 16px;" src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
+                <a href="/profile/<%=myself%>" class="mr-2"><img title="My Profile" data-toggle="tooltip" data-placement="bottom" style="width: 32px; height: 32px; border-radius: 16px;" src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
                 <a class="btn btn-sm btn-success mr-2" href="/create-post">Create Post</a>
                 <form action="/logout" method="POST" class="d-inline">
                   <input type="hidden" name="_csrf" value="FbfY4oWi-5kP6LnqTZXMnuFP9T-HWA2Xi4KI">
@@ -36,12 +36,12 @@
 
 
     <div class="d-flex justify-content-between">
-      <h2>adsfas</h2>
+      <h2><%=post_sent.title%></h2>
 
         <span class="pt-2">
-          <a href="/post/62155e423248640004f8ad82/edit" class="text-primary mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
-          <form class="delete-post-form d-inline" action="/post/62155e423248640004f8ad82/delete" method="POST">
-            <input type="hidden" name="_csrf" value="FbfY4oWi-5kP6LnqTZXMnuFP9T-HWA2Xi4KI">
+          <a href="/post/<%=post_sent._id%>/edit" class="text-primary mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
+          <form class="delete-post-form d-inline" action="/post/<%=post_sent._id%>/delete" method="POST">
+            <!-- <input type="hidden" name="_csrf" value="FbfY4oWi-5kP6LnqTZXMnuFP9T-HWA2Xi4KI"> -->
             <button class="delete-post-button text-danger" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
           </form>
         </span>
@@ -49,12 +49,11 @@
     </div>
 
     <p class="text-muted small mb-4">
-      <a href="/profile/dontknow"><img class="avatar-tiny" src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
-      Posted by <a href="/profile/dontknow">dontknow</a> on 2/22/2022</p>
-
+      <a href="/profile/<%=post_sent.username%>"><img class="avatar-tiny" src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
+      Posted by <a href="/profile/<%=post_sent.username%>"><%=post_sent.username%></a> <%=post_sent.date%></p>
 
     <div class="body-content">
-        <p>fdasfsda</p>
+        <p><%=post_sent.description%></p>
 
     </div>
 

@@ -4,7 +4,7 @@ var user_doc = require('../models/User');
 
 
 module.exports.home_dashboard = (req, res) => {
-    res.render('home-dashboard',{user : req.session.user});
+    res.render('home-dashboard', { user: req.session.user });
 };
 
 module.exports.home_guest = (req, res) => {
@@ -12,13 +12,11 @@ module.exports.home_guest = (req, res) => {
 };
 
 module.exports.profile = (req, res) => {
-    user_doc.findOne({username: req.params.username})
-        .then(result=>{
-            // console.log(result.post.length);
-
-            res.render('profile',{other: result,myself: req.session.user});
+    user_doc.findOne({ username: req.params.username })
+        .then(result => {
+            res.render('profile', { other: result, myself: req.session.user });
         })
-        .catch(err=>{
+        .catch(err => {
             res.redirect('back');
         });
 };

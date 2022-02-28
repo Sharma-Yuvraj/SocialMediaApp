@@ -26,8 +26,10 @@ router.post('/logout', isAuth, userController.user_logout);
 
 router.get('/create-post', isAuth, postController.create_post_get);
 router.post('/create-post', isAuth, postController.create_post_post);
-router.post('/edit-post', isAuth, postController.edit_post);
-router.post('/post', isAuth, postController.single_post_screen);
+router.get('/post/:id/edit', isAuth, postController.edit_post_get);
+router.post('/post/:id/edit', isAuth, postController.edit_post_post);
+router.post('/post/:id/delete', isAuth, postController.delete_post);
+router.get('/post/:id', isAuth, postController.single_post_screen);
 
 
 

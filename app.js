@@ -36,7 +36,7 @@ app.use('/', route);
 
 mongoose.connect(url,function (err, client) {
     if (err) console.log(err);
-
+    
     app.listen(port, function (err) {
         if (err) {
             console.log('error in running the server', err);

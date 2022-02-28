@@ -63,9 +63,9 @@
         <div class="list-group">
 
             <%for(var i=0;i<other.post.length;i++){%>
-                <a href="/post/621baf491fa97b00044e3562" class="list-group-item list-group-item-action">
+                <a href="/post/<%=other.post[i].post_id%>" class="list-group-item list-group-item-action">
                     <img class="avatar-tiny" src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128">
-                    <strong>upender is my friend</strong> on 2/27/2022
+                    <strong><%=other.post[i].post_title%></strong> on 2/27/2022
                 </a>
             <%}%>
 
