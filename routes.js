@@ -37,8 +37,10 @@ router.get('/post/:id', isAuth, postController.single_post_screen);
 
 
 
-router.get('/profile-following', isAuth, followController.profile_following);
-router.get('/profile-followers', isAuth, followController.profile_followers);
+router.get('/profile/:username/following', isAuth, followController.profile_following);
+router.get('/profile/:username/followers', isAuth, followController.profile_followers);
+router.post('/addFollow/:username', isAuth, followController.add_follow);
+router.post('/removeFollow/:username', isAuth, followController.remove_follow);
 
 
 module.exports = router;

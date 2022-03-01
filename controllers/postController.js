@@ -1,12 +1,12 @@
-var Post = require('../models/Post');
+var post_doc = require('../models/Post');
 var user_doc = require('../models/User');
 
 exports.create_post_get = (req, res) => {
-    res.render('create-post');
+    res.render('create-post',{myself:req.session.user});
 };
 exports.create_post_post = (req, res) => {
     const { title, body } = req.body;
-    const newPost = new Post({
+    const newPost = new post_doc({
         title: title,
         description: body,
         username: req.session.user.username,
@@ -29,7 +29,7 @@ exports.create_post_post = (req, res) => {
 
 };
 exports.edit_post_get = (req, res) => {
-    Post.findOne({ _id: req.params.id })
+    post_doc.findOne({ _id: req.params.id })
         .then(result => {
             if (result == null) {
                 res.redirect('back');
@@ -44,7 +44,7 @@ exports.edit_post_get = (req, res) => {
 };
 exports.edit_post_post = (req, res) => {
     const { title, body } = req.body;
-    Post.findOneAndUpdate({ _id: req.params.id },
+    post_doc.findOneAndUpdate({ _id: req.params.id },
         { title: title, description: body })
         .then(result => {
             if (result == null) {
@@ -66,13 +66,13 @@ exports.edit_post_post = (req, res) => {
         });
 };
 exports.single_post_screen = (req, res) => {
-    Post.findOne({ _id: req.params.id })
+    post_doc.findOne({ _id: req.params.id })
         .then(result => {
             if (result == null) {
                 res.redirect('back');
             }
             else {
-                res.render('single-post-screen', { post_sent: result, myself: req.session.user.username });
+                res.render('single-post-screen', { post_sent: result, myself: req.session.user });
             }
         })
         .catch(err => {
@@ -81,7 +81,7 @@ exports.single_post_screen = (req, res) => {
 };
 
 exports.delete_post = (req, res) => {
-    Post.deleteOne({ _id: req.params.id })
+    post_doc.deleteOne({ _id: req.params.id })
         .then(result => {
             user_doc.updateOne({ username: req.session.user.username },
                 { $pull: { post: { post_id: req.params.id } } })

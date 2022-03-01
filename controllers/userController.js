@@ -1,10 +1,24 @@
 var bcrypt = require('bcryptjs');
 var validator = require('validator');
 var user_doc = require('../models/User');
-
+var post_doc = require('../models/Post');
 
 module.exports.home_dashboard = (req, res) => {
-    res.render('home-dashboard', { user: req.session.user });
+    user_doc.findOne({ username: req.session.user.username })
+        .then(result => {
+            var arr = result.following.map(a => a.following_name);
+            arr.push(req.session.user.username);
+            post_doc.find({ username: { $in: arr } }).sort({ date: -1 })
+                .then(result2 => {
+                    res.render('home-dashboard', { user: req.session.user, recent_posts: result2 });
+                })
+                .catch(error2 => {
+                    res.json(error2);
+                });
+        })
+        .catch(error => {
+            res.json(error);
+        });
 };
 
 module.exports.home_guest = (req, res) => {
@@ -14,7 +28,23 @@ module.exports.home_guest = (req, res) => {
 module.exports.profile = (req, res) => {
     user_doc.findOne({ username: req.params.username })
         .then(result => {
-            res.render('profile', { other: result, myself: req.session.user });
+            if (result.username == req.session.user.username) {
+                res.render('profile', { other: result, myself: req.session.user, who: '0' });  // not showing any button
+            }
+            else {
+                user_doc.findOne({ username: req.params.username, "followers.follower_name": req.session.user.username })
+                    .then(result2 => {
+                        if (result2 == null) {
+                            res.render('profile', { other: result, myself: req.session.user, who: '1' });  //showing follow button
+                        }
+                        else {
+                            res.render('profile', { other: result, myself: req.session.user, who: '2' });  //showing unfollow button
+                        }
+                    })
+                    .catch(error => {
+                        res.json(error);
+                    });
+            }
         })
         .catch(err => {
             res.redirect('back');
