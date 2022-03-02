@@ -43,4 +43,6 @@ router.post('/addFollow/:username', isAuth, followController.add_follow);
 router.post('/removeFollow/:username', isAuth, followController.remove_follow);
 
 
+router.post('/search', isAuth, userController.search_profile);
+
 module.exports = router;

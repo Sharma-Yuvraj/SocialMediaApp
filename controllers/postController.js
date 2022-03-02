@@ -2,7 +2,7 @@ var post_doc = require('../models/Post');
 var user_doc = require('../models/User');
 
 exports.create_post_get = (req, res) => {
-    res.render('create-post',{myself:req.session.user});
+    res.render('create-post', { myself: req.session.user });
 };
 exports.create_post_post = (req, res) => {
     const { title, body } = req.body;

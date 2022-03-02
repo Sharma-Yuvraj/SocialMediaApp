@@ -3,6 +3,17 @@ var validator = require('validator');
 var user_doc = require('../models/User');
 var post_doc = require('../models/Post');
 
+module.exports.search_profile = (req, res) => {
+    user_doc.findOne({ username: req.body.username })
+        .then(result => {
+            res.redirect(`/profile/${req.body.username}`);
+
+        })
+        .catch(err => {
+            res.json(err);
+        });
+};
+
 module.exports.home_dashboard = (req, res) => {
     user_doc.findOne({ username: req.session.user.username })
         .then(result => {
@@ -10,7 +21,7 @@ module.exports.home_dashboard = (req, res) => {
             arr.push(req.session.user.username);
             post_doc.find({ username: { $in: arr } }).sort({ date: -1 })
                 .then(result2 => {
-                    res.render('home-dashboard', { user: req.session.user, recent_posts: result2 });
+                    res.render('home-dashboard', { myself : req.session.user, recent_posts: result2 });
                 })
                 .catch(error2 => {
                     res.json(error2);
@@ -28,6 +39,9 @@ module.exports.home_guest = (req, res) => {
 module.exports.profile = (req, res) => {
     user_doc.findOne({ username: req.params.username })
         .then(result => {
+            if (result == null) {
+                res.redirect('back');
+            }
             if (result.username == req.session.user.username) {
                 res.render('profile', { other: result, myself: req.session.user, who: '0' });  // not showing any button
             }
@@ -47,7 +61,7 @@ module.exports.profile = (req, res) => {
             }
         })
         .catch(err => {
-            res.redirect('back');
+            res.json(err);
         });
 };
 

@@ -1,5 +1,6 @@
+// "watch": "webpack --watch"
 const express = require('express');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 const route = require('./routes');
@@ -7,6 +8,10 @@ const path = require('path');
 const session = require('express-session');
 const mongodbSession = require('connect-mongodb-session')(session);
 const dotenv = require('dotenv');
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 dotenv.config({ path: './config.env' });
 const url = process.env.URL;
@@ -34,14 +39,24 @@ app.use(
 app.use('/', route);
 
 
-mongoose.connect(url,function (err, client) {
+mongoose.connect(url, function (err, client) {
     if (err) console.log(err);
-    
-    app.listen(port, function (err) {
-        if (err) {
-            console.log('error in running the server', err);
+
+    server.listen(port, function (error) {
+        if (error) {
+
+            console.log('error in running the server', error);
             return;
         }
+        io.on('connection', (socket) => {
+            socket.on('chat_message', (msg) => {
+                io.emit('chat_message', msg);
+            });
+        });
         console.log('server is running succefully');
     })
 });
+
+
+
+// socket kind of things
