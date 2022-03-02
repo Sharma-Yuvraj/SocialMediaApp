@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>adsfas | OurApp</title>
+    <title>OurApp</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"
@@ -25,14 +25,13 @@
                     <input type="text" name="username" placeholder="search username">
                     <button class="btn btn-sm btn-secondary">Search</button>
                 </form>
-                <span class="text-white mr-2 header-chat-icon" title="Chat" data-toggle="tooltip"
+                <span class="text-white mr-2 header-chat-icon" id="chat-icon" title="Chat" data-toggle="tooltip"
                     data-placement="bottom"><i class="fas fa-comment"></i></span>
-                <a href="/profile/<%=myself.username%>" class="mr-2"><img title="My Profile" data-toggle="tooltip"
+                <a href="/profile/<%=myself%>" class="mr-2"><img title="My Profile" data-toggle="tooltip"
                         data-placement="bottom" style="width: 32px; height: 32px; border-radius: 16px;"
-                        src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
+                        src="/profile_icon.jpg"></a>
                 <a class="btn btn-sm btn-success mr-2" href="/create-post">Create Post</a>
                 <form action="/logout" method="POST" class="d-inline">
-                    <input type="hidden" name="_csrf" value="FbfY4oWi-5kP6LnqTZXMnuFP9T-HWA2Xi4KI">
                     <button class="btn btn-sm btn-secondary">Sign Out</button>
                 </form>
             </div>
@@ -55,7 +54,6 @@
                 <a href="/post/<%=post_sent._id%>/edit" class="text-primary mr-2" data-toggle="tooltip"
                     data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
                 <form class="delete-post-form d-inline" action="/post/<%=post_sent._id%>/delete" method="POST">
-                    <!-- <input type="hidden" name="_csrf" value="FbfY4oWi-5kP6LnqTZXMnuFP9T-HWA2Xi4KI"> -->
                     <button class="delete-post-button text-danger" data-toggle="tooltip" data-placement="top"
                         title="Delete"><i class="fas fa-trash"></i></button>
                 </form>
@@ -64,8 +62,7 @@
         </div>
 
         <p class="text-muted small mb-4">
-            <a href="/profile/<%=post_sent.username%>"><img class="avatar-tiny"
-                    src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
+            <a href="/profile/<%=post_sent.username%>"><img class="avatar-tiny" src="/profile_icon.jpg"></a>
             Posted by <a href="/profile/<%=post_sent.username%>">
                 <%=post_sent.username%>
             </a>
@@ -84,7 +81,7 @@
 
     <!-- footer begins -->
     <footer class="border-top text-center small text-muted py-3">
-        <p class="m-0">Copyright &copy; 2019 <a href="/" class="text-muted">OurApp</a>. All rights reserved.</p>
+        <p class="m-0">Copyright &copy; 2022 <a href="/" class="text-muted">OurApp</a>. All rights reserved.</p>
     </footer>
 
 
@@ -102,25 +99,20 @@
 
         <form id="chatForm" class="chat-form border-top">
             <input type="text" class="chat-field" id="chatField" placeholder="Type a message…" autocomplete="off">
-            <input type="hidden" id="userFixed" value="<%=myself.username%>">
+            <input type="hidden" id="userFixed" value="<%=myself%>">
         </form>
 
     </div>
 
+
     <script src="/socket.io/socket.io.js"></script>
-
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
     <script>$('[data-toggle="tooltip"]').tooltip()</script>
     <script src="/main-bundled.js"></script>
+
+
 </body>
 
 </html>

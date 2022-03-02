@@ -21,7 +21,7 @@ module.exports.home_dashboard = (req, res) => {
             arr.push(req.session.user.username);
             post_doc.find({ username: { $in: arr } }).sort({ date: -1 })
                 .then(result2 => {
-                    res.render('home-dashboard', { myself : req.session.user, recent_posts: result2 });
+                    res.render('home-dashboard', { myself : req.session.user.username, recent_posts: result2 });
                 })
                 .catch(error2 => {
                     res.json(error2);
@@ -43,16 +43,16 @@ module.exports.profile = (req, res) => {
                 res.redirect('back');
             }
             if (result.username == req.session.user.username) {
-                res.render('profile', { other: result, myself: req.session.user, who: '0' });  // not showing any button
+                res.render('profile', { other: result, myself: req.session.user.username, who: '0' });  // not showing any button
             }
             else {
                 user_doc.findOne({ username: req.params.username, "followers.follower_name": req.session.user.username })
                     .then(result2 => {
                         if (result2 == null) {
-                            res.render('profile', { other: result, myself: req.session.user, who: '1' });  //showing follow button
+                            res.render('profile', { other: result, myself: req.session.user.username, who: '1' });  //showing follow button
                         }
                         else {
-                            res.render('profile', { other: result, myself: req.session.user, who: '2' });  //showing unfollow button
+                            res.render('profile', { other: result, myself: req.session.user.username, who: '2' });  //showing unfollow button
                         }
                     })
                     .catch(error => {

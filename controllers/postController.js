@@ -2,7 +2,7 @@ var post_doc = require('../models/Post');
 var user_doc = require('../models/User');
 
 exports.create_post_get = (req, res) => {
-    res.render('create-post', { myself: req.session.user });
+    res.render('create-post', { myself: req.session.user.username });
 };
 exports.create_post_post = (req, res) => {
     const { title, body } = req.body;
@@ -72,7 +72,7 @@ exports.single_post_screen = (req, res) => {
                 res.redirect('back');
             }
             else {
-                res.render('single-post-screen', { post_sent: result, myself: req.session.user });
+                res.render('single-post-screen', { post_sent: result, myself: req.session.user.username });
             }
         })
         .catch(err => {

@@ -14,7 +14,16 @@ const isAuth = (req, res, next) => {
     }
 };
 
-router.get('/', userController.home_guest);
+const isLoggedIn = (req, res, next) => {
+    if (req.session.isAuth) {
+        res.redirect('/home-dashboard');
+    }
+    else {
+        next();
+    }
+};
+
+router.get('/', isLoggedIn , userController.home_guest);
 
 router.get('/home-dashboard', isAuth, userController.home_dashboard);
 router.get('/profile/:username', isAuth, userController.profile);

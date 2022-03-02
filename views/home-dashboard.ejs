@@ -29,13 +29,12 @@
                 <span class="text-white mr-2 header-chat-icon" id="chat-icon" title="Chat" data-toggle="tooltip"
                     data-placement="bottom"><i class="fas fa-comment"></i></span>
 
-                <a href="/profile/<%=myself.username%>" class="mr-2"><img title="My Profile" data-toggle="tooltip"
+                <a href="/profile/<%=myself%>" class="mr-2"><img title="My Profile" data-toggle="tooltip"
                         data-placement="bottom" style="width: 32px; height: 32px; border-radius: 16px;"
-                        src="https://gravatar.com/avatar/361dbecd253104e28f43dd9656528775?s=128"></a>
+                        src="/profile_icon.jpg"></a>
 
                 <a class="btn btn-sm btn-success mr-2" href="/create-post">Create Post</a>
                 <form action="/logout" method="POST" class="d-inline">
-                    <!-- <input type="hidden" name="_csrf" value="nj8TLzt3-OTy2CSqjGC8WDkI5hWMr9XltYq8"> -->
                     <button class="btn btn-sm btn-secondary">Sign Out</button>
                 </form>
 
@@ -48,7 +47,7 @@
         <%if(recent_posts.length==0){%>
             <div class="text-center">
                 <h2>Hello <strong>
-                        <%= user.username %>
+                        <%= myself %>
                     </strong>, your feed is empty.</h2>
                 <p class="lead text-muted">Your feed displays the latest posts from the people you follow. If you
                     don&rsquo;t have any friends to follow that&rsquo;s okay; you can use the &ldquo;Search&rdquo;
@@ -63,7 +62,7 @@
                         <%for(var i=0;i<recent_posts.length;i++){%>
                             <a href="/post/<%=recent_posts[i]._id%>" class="list-group-item list-group-item-action">
                                 <img class="avatar-tiny"
-                                    src="https://gravatar.com/avatar/838afbc4de3446a26170d809bb684cf1?s=128">
+                                    src="/profile_icon.jpg">
                                 <strong>
                                     <%=recent_posts[i].title%>
                                 </strong> <span class="text-muted small">by <%=recent_posts[i].username%> on
@@ -79,7 +78,7 @@
 
     <!-- footer begins -->
     <footer class="border-top text-center small text-muted py-3">
-        <p class="m-0">Copyright &copy; 2019 <a href="/" class="text-muted">OurApp</a>. All rights reserved.</p>
+        <p class="m-0">Copyright &copy; 2022 <a href="/" class="text-muted">OurApp</a>. All rights reserved.</p>
     </footer>
 
 
@@ -97,7 +96,7 @@
 
         <form id="chatForm" class="chat-form border-top">
             <input type="text" class="chat-field" id="chatField" placeholder="Type a message…" autocomplete="off">
-            <input type="hidden" id="userFixed" value="<%=myself.username%>">
+            <input type="hidden" id="userFixed" value="<%=myself%>">
         </form>
 
     </div>
@@ -105,13 +104,6 @@
 
 
     <script src="/socket.io/socket.io.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>

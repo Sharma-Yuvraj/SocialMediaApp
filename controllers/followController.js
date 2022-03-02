@@ -4,16 +4,16 @@ exports.profile_followers = (req, res) => {
     user_doc.findOne({ username: req.params.username })
         .then(result => {
             if (result.username == req.session.user.username) {
-                res.render('profile-followers', { other: result, myself: req.session.user, who: '0' });  // not showing any button
+                res.render('profile-followers', { other: result, myself: req.session.user.username, who: '0' });  // not showing any button
             }
             else {
                 user_doc.findOne({ username: req.params.username, "followers.follower_name": req.session.user.username })
                     .then(result2 => {
                         if (result2 == null) {
-                            res.render('profile-followers', { other: result, myself: req.session.user, who: '1' });  //showing follow button
+                            res.render('profile-followers', { other: result, myself: req.session.user.username, who: '1' });  //showing follow button
                         }
                         else {
-                            res.render('profile-followers', { other: result, myself: req.session.user, who: '2' });  //showing unfollow button
+                            res.render('profile-followers', { other: result, myself: req.session.user.username, who: '2' });  //showing unfollow button
                         }
                     })
                     .catch(error => {
@@ -30,16 +30,16 @@ exports.profile_following = (req, res) => {
         .then(result => {
             // below code is to decide which button(follow/unfollow/nothing) to be shown
             if (result.username == req.session.user.username) {
-                res.render('profile-following', { other: result, myself: req.session.user, who: '0' });  // not showing any button
+                res.render('profile-following', { other: result, myself: req.session.user.username, who: '0' });  // not showing any button
             }
             else {
                 user_doc.findOne({ username: req.params.username, "followers.follower_name": req.session.user.username })
                     .then(result2 => {
                         if (result2 == null) {
-                            res.render('profile-following', { other: result, myself: req.session.user, who: '1' });  //showing follow button
+                            res.render('profile-following', { other: result, myself: req.session.user.username, who: '1' });  //showing follow button
                         }
                         else {
-                            res.render('profile-following', { other: result, myself: req.session.user, who: '2' });  //showing unfollow button
+                            res.render('profile-following', { other: result, myself: req.session.user.username, who: '2' });  //showing unfollow button
                         }
                     })
                     .catch(error => {
