@@ -8,3 +8,4 @@ sessions and authentication : https://www.youtube.com/watch?v=TDe7DRYK8vU;
 
 main logic : https://gabrieleromanato.name/nodejs-create-a-simple-social-network-with-expressjs
 
+hosting on heroku : https://www.youtube.com/watch?v=MxfxiR8TVNU
