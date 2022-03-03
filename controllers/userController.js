@@ -42,7 +42,7 @@ module.exports.profile = (req, res) => {
             if (result == null) {
                 res.redirect('back');
             }
-            if (result.username == req.session.user.username) {
+            else if (result.username == req.session.user.username) {
                 res.render('profile', { other: result, myself: req.session.user.username, who: '0' });  // not showing any button
             }
             else {
@@ -123,7 +123,7 @@ module.exports.user_login = (req, res) => {
             if (result == null) {
                 res.redirect('/');
             }
-            if (bcrypt.compareSync(password, result.password)) {
+            else if (bcrypt.compareSync(password, result.password)) {
                 req.session.isAuth = true;
                 req.session.user = result;
                 res.redirect('/home-dashboard');
