@@ -23,22 +23,22 @@ const isLoggedIn = (req, res, next) => {
     }
 };
 
-router.get('/', isLoggedIn , userController.home_guest);
-
-router.get('/home-dashboard', isAuth, userController.home_dashboard);
-router.get('/profile/:username', isAuth, userController.profile);
-router.post('/login', userController.user_login);
+router.get('/', isLoggedIn, userController.home_guest);
 router.post('/register', userController.user_register);
+router.post('/login', userController.user_login);
+router.get('/home-dashboard', isAuth, userController.home_dashboard);
+router.post('/search', isAuth, userController.search_profile);
+router.get('/profile/:username', isAuth, userController.profile);
 router.post('/logout', isAuth, userController.user_logout);
 
 
 
 router.get('/create-post', isAuth, postController.create_post_get);
 router.post('/create-post', isAuth, postController.create_post_post);
+router.get('/post/:id', isAuth, postController.single_post_screen);
 router.get('/post/:id/edit', isAuth, postController.edit_post_get);
 router.post('/post/:id/edit', isAuth, postController.edit_post_post);
 router.post('/post/:id/delete', isAuth, postController.delete_post);
-router.get('/post/:id', isAuth, postController.single_post_screen);
 
 
 
@@ -52,6 +52,5 @@ router.post('/addFollow/:username', isAuth, followController.add_follow);
 router.post('/removeFollow/:username', isAuth, followController.remove_follow);
 
 
-router.post('/search', isAuth, userController.search_profile);
 
 module.exports = router;

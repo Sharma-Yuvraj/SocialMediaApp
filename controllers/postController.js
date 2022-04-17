@@ -2,14 +2,15 @@ var post_doc = require('../models/Post');
 var user_doc = require('../models/User');
 
 exports.create_post_get = (req, res) => {
-    res.render('create-post', { myself: req.session.user.username });
+    res.render('create-post', { myself: req.session.username });
 };
+
 exports.create_post_post = (req, res) => {
     const { title, body } = req.body;
     const newPost = new post_doc({
         title: title,
         description: body,
-        username: req.session.user.username,
+        username: req.session.username,
         date: new Date(),
     });
     var id;
@@ -28,6 +29,22 @@ exports.create_post_post = (req, res) => {
         .catch(err => res.json(err));
 
 };
+
+exports.single_post_screen = (req, res) => {
+    post_doc.findOne({ _id: req.params.id })
+        .then(result => {
+            if (result == null) {
+                res.redirect('back');
+            }
+            else {
+                res.render('single-post-screen', { post_sent: result, myself: req.session.username });
+            }
+        })
+        .catch(err => {
+            res.json(err);
+        });
+};
+
 exports.edit_post_get = (req, res) => {
     post_doc.findOne({ _id: req.params.id })
         .then(result => {
@@ -35,13 +52,14 @@ exports.edit_post_get = (req, res) => {
                 res.redirect('back');
             }
             else {
-                res.render('edit-post', { post_to_edit: result, myself: req.session.user.username });
+                res.render('edit-post', { post_to_edit: result, myself: req.session.username });
             }
         })
         .catch(err => {
             res.json(err);
         });
 };
+
 exports.edit_post_post = (req, res) => {
     const { title, body } = req.body;
     post_doc.findOneAndUpdate({ _id: req.params.id },
@@ -65,28 +83,15 @@ exports.edit_post_post = (req, res) => {
             res.json(err);
         });
 };
-exports.single_post_screen = (req, res) => {
-    post_doc.findOne({ _id: req.params.id })
-        .then(result => {
-            if (result == null) {
-                res.redirect('back');
-            }
-            else {
-                res.render('single-post-screen', { post_sent: result, myself: req.session.user.username });
-            }
-        })
-        .catch(err => {
-            res.json(err);
-        });
-};
+
 
 exports.delete_post = (req, res) => {
     post_doc.deleteOne({ _id: req.params.id })
         .then(result => {
-            user_doc.updateOne({ username: req.session.user.username },
+            user_doc.updateOne({ username: req.session.username },
                 { $pull: { post: { post_id: req.params.id } } })
                 .then(result2 => {
-                    res.redirect(`/profile/${req.session.user.username}`);
+                    res.redirect(`/profile/${req.session.username}`);
                 })
                 .catch(error => {
                     res.json(error);

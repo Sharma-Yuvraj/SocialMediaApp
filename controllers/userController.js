@@ -3,66 +3,8 @@ var validator = require('validator');
 var user_doc = require('../models/User');
 var post_doc = require('../models/Post');
 
-module.exports.search_profile = (req, res) => {
-    user_doc.findOne({ username: req.body.username })
-        .then(result => {
-            res.redirect(`/profile/${req.body.username}`);
-
-        })
-        .catch(err => {
-            res.json(err);
-        });
-};
-
-module.exports.home_dashboard = (req, res) => {
-    user_doc.findOne({ username: req.session.user.username })
-        .then(result => {
-            var arr = result.following.map(a => a.following_name);
-            arr.push(req.session.user.username);
-            post_doc.find({ username: { $in: arr } }).sort({ date: -1 })
-                .then(result2 => {
-                    res.render('home-dashboard', { myself : req.session.user.username, recent_posts: result2 });
-                })
-                .catch(error2 => {
-                    res.json(error2);
-                });
-        })
-        .catch(error => {
-            res.json(error);
-        });
-};
-
 module.exports.home_guest = (req, res) => {
     res.render('home-guest');
-};
-
-module.exports.profile = (req, res) => {
-    user_doc.findOne({ username: req.params.username })
-        .then(result => {
-            if (result == null) {
-                res.redirect('back');
-            }
-            else if (result.username == req.session.user.username) {
-                res.render('profile', { other: result, myself: req.session.user.username, who: '0' });  // not showing any button
-            }
-            else {
-                user_doc.findOne({ username: req.params.username, "followers.follower_name": req.session.user.username })
-                    .then(result2 => {
-                        if (result2 == null) {
-                            res.render('profile', { other: result, myself: req.session.user.username, who: '1' });  //showing follow button
-                        }
-                        else {
-                            res.render('profile', { other: result, myself: req.session.user.username, who: '2' });  //showing unfollow button
-                        }
-                    })
-                    .catch(error => {
-                        res.json(error);
-                    });
-            }
-        })
-        .catch(err => {
-            res.json(err);
-        });
 };
 
 module.exports.user_register = async (req, res) => {
@@ -125,7 +67,7 @@ module.exports.user_login = (req, res) => {
             }
             else if (bcrypt.compareSync(password, result.password)) {
                 req.session.isAuth = true;
-                req.session.user = result;
+                req.session.username = username;
                 res.redirect('/home-dashboard');
             }
             else {
@@ -133,6 +75,64 @@ module.exports.user_login = (req, res) => {
             }
         })
         .catch(err => console.log(err));
+};
+
+module.exports.home_dashboard = (req, res) => {
+    user_doc.findOne({ username: req.session.username })
+        .then(result => {
+            var arr = result.following.map(a => a.following_name);
+            arr.push(req.session.username);
+            post_doc.find({ username: { $in: arr } }).sort({ date: -1 })  // returns an array
+                .then(result2 => {
+                    res.render('home-dashboard', { myself : req.session.username, recent_posts: result2 });
+                })
+                .catch(error2 => {
+                    res.json(error2);
+                });
+        })
+        .catch(error => {
+            res.json(error);
+        });
+};
+
+module.exports.search_profile = (req, res) => {
+    user_doc.findOne({ username: req.body.username })
+        .then(result => {
+            res.redirect(`/profile/${req.body.username}`);
+        })
+        .catch(err => {
+            res.json(err);
+        });
+};
+
+
+module.exports.profile = (req, res) => {
+    user_doc.findOne({ username: req.params.username })
+        .then(result => {
+            if (result == null) {
+                res.redirect('back');
+            }
+            else if (result.username == req.session.username) {
+                res.render('profile', { other: result, myself: req.session.username, who: '0' });  // not showing any button
+            }
+            else {
+                user_doc.findOne({ username: req.params.username, "followers.follower_name": req.session.username })
+                    .then(result2 => {
+                        if (result2 == null) {
+                            res.render('profile', { other: result, myself: req.session.username, who: '1' });  //showing follow button
+                        }
+                        else {
+                            res.render('profile', { other: result, myself: req.session.username, who: '2' });  //showing unfollow button
+                        }
+                    })
+                    .catch(error => {
+                        res.json(error);
+                    });
+            }
+        })
+        .catch(err => {
+            res.json(err);
+        });
 };
 
 
